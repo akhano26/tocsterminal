@@ -21,30 +21,34 @@ pipeline {
 
         stage('Test') {
             steps {
-                sh 'ls -l index.html' 
+                sh 'ls -l index.html' // Simple check for index.html
             }
         }
 
         stage('Deploy') {
             steps {
                 script {
+                    // Deploy the new version
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: "AhsanVM", 
+                                configName: "MyUbuntuServer", 
                                 transfers: [sshTransfer(
                                     execCommand: """
                                         docker pull akhano26/personal-portfolio:${env.BUILD_ID}
                                         docker stop personal-portfolio-container || true
                                         docker rm personal-portfolio-container || true
-                                        docker run -d --name personal-portfolio-container -p 80:80 akhano/personal-portfolio:${env.BUILD_ID}
+                                        docker run -d --name personal-portfolio-container -p 80:80 amuavia/personal-portfolio:${env.BUILD_ID}
                                     """
                                 )]
                             )
                         ]
                     )
+                }
+            }
+        }
+    }
 
-                    
     post {
         failure {
             mail(
