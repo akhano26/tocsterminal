@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    dockerImage = docker.build("amuavia/personal-portfolio:${env.BUILD_ID}")
+                    dockerImage = docker.build("akhano26/personal-portfolio:${env.BUILD_ID}")
                 }
             }
         }
@@ -31,13 +31,13 @@ pipeline {
                     sshPublisher(
                         publishers: [
                             sshPublisherDesc(
-                                configName: "MyUbuntuServer", 
+                                configName: "AhsanVM", 
                                 transfers: [sshTransfer(
                                     execCommand: """
-                                        docker pull amuavia/personal-portfolio:${env.BUILD_ID}
+                                        docker pull akhano26/personal-portfolio:${env.BUILD_ID}
                                         docker stop personal-portfolio-container || true
                                         docker rm personal-portfolio-container || true
-                                        docker run -d --name personal-portfolio-container -p 80:80 amuavia/personal-portfolio:${env.BUILD_ID}
+                                        docker run -d --name personal-portfolio-container -p 80:80 akhano/personal-portfolio:${env.BUILD_ID}
                                     """
                                 )]
                             )
@@ -48,7 +48,7 @@ pipeline {
     post {
         failure {
             mail(
-                to: 'muaviaa099@gmail.com',
+                to: 'ahsanmehmood7861@gmail.com',
                 subject: "Failed Pipeline: ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                 body: "Something is wrong with the build ${env.BUILD_URL}"
             )
