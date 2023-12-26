@@ -54,7 +54,7 @@ pipeline {
                         sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
-                                    configName: "AhsanVM",
+                                    configName: "AhsanInstance",
                                     transfers: [sshTransfer(
                                         execCommand: """
                                             docker pull akhano26/distance-converter:${previousSuccessfulTag}
